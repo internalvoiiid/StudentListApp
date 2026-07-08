@@ -86,5 +86,52 @@ app.post('/addStudent', (req, res) => {
     }
 });
 });
+
+// Show edit form
+app.get('/editStudent/:id', (req, res) => {
+    const studentId = req.params.id;
+    const sql = 'SELECT * FROM students WHERE studentId = ?';
+    connection.query(sql, [studentId], (error, results) => {
+        if (error) {
+            console.error("Error retrieving student:", error);
+            return res.send('Error retrieving student');
+        }
+        if (results.length > 0) {
+            res.render('editStudent', { student: results[0] });
+        } else {
+            res.send('Student not found');
+        }
+    });
+});
+
+// Handle edit form submission
+app.post('/editStudent/:id', (req, res) => {
+    const studentId = req.params.id;
+    const { name, dob, contact, image } = req.body;
+    const sql = 'UPDATE students SET name = ?, dob = ?, contact = ?, image = ? WHERE studentId = ?';
+    connection.query(sql, [name, dob, contact, image, studentId], (error) => {
+        if (error) {
+            console.error("Error updating student:", error);
+            return res.send('Error updating student');
+        }
+        res.redirect('/');
+    });
+});
+
+app.get('/deleteStudent/:id', (req, res) => {
+    const studentId = req.params.id;
+    const sql = 'DELETE FROM students WHERE studentId = ?';
+    connection.query(sql, [studentId], (error, results) => {
+        if (error) {
+            // Handle any error that occurs during the database operation
+            console.error("Error deleting student:", error);
+            res.send('Error deleting student');
+        } else {
+            // Send a success response
+            res.redirect('/');
+        }
+    });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`));
