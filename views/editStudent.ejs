@@ -41,7 +41,7 @@
 
           <div class="card-body">
             <!-- Pre-fill form fields with student data -->
-            <form action="/editStudent/<%= student.studentId %>" method="POST">
+            <form action="/editStudent/<%= student.studentId %>" method="POST" enctype="multipart/form-data">
 
               <div class="mb-3">
                 <label for="name" class="form-label">Student Name</label>
@@ -60,8 +60,14 @@
               </div>
 
               <div class="mb-4">
-                <label for="image" class="form-label">Image URL</label>
-                <input type="text" class="form-control" id="image" name="image" value="<%= student.image %>" required>
+                <!-- <label for="image" class="form-label">Image URL</label>
+                <input type="text" class="form-control" id="image" name="image" value="<%= student.image %>" required> -->
+
+                <input type="text" name="currentImage" class="form-control" value="<%= student.image %>" readonly><br>
+                <img src="/images/<%= student.image %>" width="20%"><br><br>
+                New Image:<br> <input type="file" class="form-control" id="image" name="image" accept="image/*"
+                  value="<%= student.image %>"><br><br>
+
               </div>
 
               <div class="d-grid gap-2">
